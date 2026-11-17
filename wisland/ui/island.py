@@ -25,7 +25,7 @@ from .anim import Spring, clamp, lerp, smooth
 from .compact import CompactView
 from .glass import Backdrop, exclude_from_capture
 from .nav import NavBar
-from .shape import body_path, body_points, deform, drip_path, edge_corners, neck_path, poly_path
+from .shape import anchored_path, body_path, body_points, deform, drip_path, edge_corners, neck_path, poly_path
 from .theme import G, theme
 
 Qt = QtCore.Qt
@@ -834,7 +834,13 @@ class Island(QtWidgets.QWidget):
         else:
             body_p = body_path(lbody, radii)
         path = body_p
-        if neck is not None and not neck.isEmpty():
+        depth = h if self.edge in ("top", "bottom") else w
+        if (self.mode == "anchored" and self.neck_edge == self.edge and gap_n < 1e-6
+                and self.neck_s.rest and abs(self.neck_s.x - 1) < 1e-6
+                and speed <= 30 and not playing_wave and not poking
+                and depth >= base_r + fillet):
+            path = anchored_path(lbody, self.edge, fillet, base_r)
+        elif neck is not None and not neck.isEmpty():
             path = path.united(neck)
         for d in self.drips:
             e = d["edge"]

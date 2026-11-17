@@ -1,6 +1,12 @@
-# Wisland · Windows 液态灵动岛
+# Wisland · 知识增强版
+
+基于 [AsamiAkito/wisland](https://github.com/AsamiAkito/wisland) 的个人增强分支，保留原作者的 Windows 液态灵动岛与 MIT 许可。新增 Obsidian 知识收集、默认轻量索引、按需深读、可读命名与资料关联。
+
+本分支为 `codex/knowledge-index`；`main` 保留上游版本。它与原作者的发布版本区分维护，上游更新仍需合并和测试。
 
 贴在屏幕边缘的液态毛玻璃胶囊，悬停弹性展开。Windows 10 / 11，Python + PySide6。
+
+本地二次开发新增 **知识投递口**：拖入资料或按 `Ctrl+Alt+K` 收集剪贴板，本地可靠保存，配置独立后台后自动调用 DeepSeek 整理并写回 Obsidian。见 [使用说明](docs/knowledge-capture.md) 和 [1Panel 部署说明](server/README.md)。
 
 <p align="center"><img src="docs/home.png" width="720"></p>
 
@@ -8,8 +14,8 @@
 
 1. 安装 **Python 3.10 或更新版本**：<https://www.python.org/downloads/windows/>
    （安装时勾选 **Add python.exe to PATH**）
-2. 下载本项目：右侧 **Releases** 里下载 `wisland-x.y.z.zip` 并解压
-   （或 `git clone https://github.com/AsamiAkito/wisland.git`）。
+2. 从本仓库 **Code → Download ZIP** 下载源码并解压，或运行：
+   `git clone --branch codex/knowledge-index https://github.com/qianlangzi/wisland.git`。
    路径里最好不要有特殊字符。
 3. 双击 **`setup.bat`**：自动创建 `.venv`、补齐 pip、安装依赖（PyPI 连不上时自动改用清华镜像），需要几分钟。
 4. 双击 **`wisland.vbs`** 启动。还没运行过 `setup.bat` 时，它会提示并帮你运行。
@@ -78,3 +84,18 @@
 ---
 
 实时字幕与单词本流水线移植自 [YishengTranslator-White](https://github.com/kayson-39/YishengTranslator-White)（MIT）。MIT License.
+
+## 跟进原作者更新
+
+本fork的main保留上游版本，个人增强位于codex/knowledge-index。首次克隆后可添加upstream：
+
+```bash
+git remote add upstream https://github.com/AsamiAkito/wisland.git
+git fetch upstream
+git switch main
+git merge --ff-only upstream/main
+git switch codex/knowledge-index
+git merge main
+```
+
+合并后运行测试再使用，不要用上游文件包直接覆盖个人配置或知识数据。开发测试需安装根requirements.txt及server/requirements.txt，执行python -m unittest discover -s tests。
